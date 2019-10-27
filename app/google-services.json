@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "44125077991",
+    "firebase_url": "https://smartdeals-bbf87.firebaseio.com",
+    "project_id": "smartdeals-bbf87",
+    "storage_bucket": "smartdeals-bbf87.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:44125077991:android:2d7acd0321f6848c40fd42",
+        "android_client_info": {
+          "package_name": "com.example.smartdeals"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "44125077991-m2k1ffu1f1cj9ale23ujpj483fods8jc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.smartdeals",
+            "certificate_hash": "d77e6a1259dfbddec56c04dccfdb37797a6dd260"
+          }
+        },
+        {
+          "client_id": "44125077991-24q5ufisqnlbgvksof94scqhk51r4kl4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpww9FqK7iW4Ux_-S5N7yk_ftZ4-rmLl8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "44125077991-24q5ufisqnlbgvksof94scqhk51r4kl4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ActivityRegister">
+    <EditText
+        android:id="@+id/inREmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Enter Email"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="350dp"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        />
+    <EditText
+        android:id="@+id/inRpass"
+        android:layout_below="@+id/inREmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:inputType="textPassword"
+        />
+
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/registericon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"/>
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:autoSizeTextType="uniform"
+        android:text="Register to continue"
+        android:typeface="sans"
+        android:textColor="#858383"
+
+        />
+
+
+
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/userRName"
+        android:hint="Name"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/imageView"
+        android:layout_marginTop="50dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+
+        >
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:id="@+id/buttonRegisterBuyer"
+            android:text="Reg As buyer"
+            android:background="@drawable/buttonshapelogin"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="50dp"
+            android:textColor="#0A0A0A"
+            android:typeface="serif"
+
+            />
+
+
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:id="@+id/buttonRegisterSeller"
+            android:text="Reg As Seller"
+            android:background="@drawable/buttonshape"
+            android:layout_marginTop="50dp"
+            android:textColor="#000000"
+            android:typeface="serif"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            />
+        <TextView
+
+            android:id="@+id/textBtnforLoginPage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Already registered? click here"
+            android:typeface="sans"
+            android:layout_marginTop="30dp"
+            android:textColor="#B1B0B0"
+            android:layout_centerHorizontal="true"
+            android:onClick="LoginPage"
+            android:layout_below="@+id/buttonRegisterBuyer"
+
+            />
+
+
+</RelativeLayout>
+
+</RelativeLayout>

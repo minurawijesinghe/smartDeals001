@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Item">
+
+
+
+    <ImageView
+        android:id="@+id/imageproduct"
+        android:layout_width="150dp"
+         android:layout_marginTop="15dp"
+        android:layout_height="300dp"
+        android:padding="7dp"
+        android:background="@drawable/cocacola"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/productdescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="coca cola "
+        android:layout_below="@id/imageproduct"
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
+        style="@android:style/TextAppearance.Large"
+        android:layout_marginTop="50dp"
+        />
+
+    <TextView
+        android:id="@+id/offerDiscription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="stand a chance to win two air to melbourne with coc. just buy and chill "
+        android:layout_below="@id/productdescription"
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
+        style="@android:style/TextAppearance.Holo.Medium"
+        android:layout_marginTop="20dp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/seller"
+        android:text="at Keals Supermarcket"
+        android:paddingLeft="15dp"
+        android:clickable="true"
+        android:layout_below="@+id/offerDiscription"
+        android:layout_marginTop="20dp"
+        android:textColor="#0B61F7"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_centerHorizontal="true"
+        >
+        <Button
+            android:id="@+id/buttonLocate"
+            tools:layout_editor_absoluteX="312dp"
+            tools:layout_editor_absoluteY="2dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="270dp"
+            android:layout_marginBottom="20dp"
+
+
+            android:text="Locate"
+            android:textColor="#000000"
+            android:textSize="10sp"
+            android:typeface="serif"
+
+            android:layout_width="140dp"
+            android:layout_height="30dp"
+            android:background="@drawable/buttonshape"  />
+        <Button
+            android:id="@+id/buttonResevre"
+            tools:layout_editor_absoluteX="312dp"
+            tools:layout_editor_absoluteY="2dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="20dp"
+
+
+
+            android:text="Reserve"
+            android:textColor="#000000"
+            android:textSize="10sp"
+            android:typeface="serif"
+
+            android:layout_width="140dp"
+            android:layout_height="30dp"
+            android:background="@drawable/buttonshape"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="-11dp"
+        android:layout_marginBottom="14dp">
+
+        <Button
+            android:id="@+id/ButtonDecrement"
+            style="@style/QuantityPickerButtonStyle"
+            android:layout_marginLeft="100dp"
+            android:onClick="decrement"
+            android:text="-"
+            android:textColor="#1F1F1F"
+            android:textSize="20dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/buttonshape2"
+
+
+            />
+
+        <Button
+            android:id="@+id/buttonIncrement"
+            style="@style/QuantityPickerButtonStyle"
+            android:layout_marginBottom="50dp"
+            android:layout_toRightOf="@+id/quantity_text_view"
+            android:onClick="increment"
+            android:text="+"
+            android:textColor="#1F1F1F"
+            android:textSize="20dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/buttonshape2"
+
+
+            />
+
+        <TextView
+            android:id="@+id/quantity_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/ButtonDecrement"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="@string/initial_quantity_value"
+            android:textColor="@android:color/black"
+            android:textSize="25dp"
+            android:background="#C5C2C2"
+            />
+
+        <TextView
+            android:id="@+id/qt"
+            style="@style/HeaderTextStyle"
+            android:textSize="12dp"
+            android:layout_marginLeft="20dp"
+            android:text="Quantity" />
+
+
+    </RelativeLayout>
+
+</RelativeLayout>
