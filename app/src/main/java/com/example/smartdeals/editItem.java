@@ -1,6 +1,7 @@
 package com.example.smartdeals;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,11 +16,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -34,6 +40,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
 public class editItem extends AppCompatActivity {
     private Button btn;
@@ -41,6 +48,9 @@ public class editItem extends AppCompatActivity {
     private static final String IMAGE_DIRECTORY = "/demonuts";
     private int GALLERY = 1, CAMERA = 2;
     private StorageReference mStorageRef;
+    public Bitmap image1;
+   public Uri filePath;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,11 +118,15 @@ public class editItem extends AppCompatActivity {
         if (requestCode == GALLERY) {
             if (data != null) {
                 Uri contentURI = data.getData();
+                filePath = contentURI;
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
                     String path = saveImage(bitmap);
                     Toast.makeText(editItem.this, "Image Saved!", Toast.LENGTH_SHORT).show();
+
                     imageview.setImageBitmap(bitmap);
+                    upload();
+
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -124,6 +138,7 @@ public class editItem extends AppCompatActivity {
             Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
             imageview.setImageBitmap(thumbnail);
             saveImage(thumbnail);
+            upload();
             Toast.makeText(editItem.this, "Image Saved!", Toast.LENGTH_SHORT).show();
         }
     }
@@ -192,5 +207,39 @@ public class editItem extends AppCompatActivity {
                 .onSameThread()
                 .check();
     }
+
+    public void upload(){
+        if(filePath != null)
+        {
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
+
+            StorageReference ref = mStorageRef.child("images/"+ UUID.randomUUID().toString());
+            ref.putFile(filePath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.dismiss();
+                            Toast.makeText(editItem.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(editItem.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                                    .getTotalByteCount());
+                            progressDialog.setMessage("Uploaded "+(int)progress+"%");
+                        }
+                    });
+        }
    
+}
 }

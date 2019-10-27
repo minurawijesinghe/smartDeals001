@@ -30,6 +30,7 @@
         <activity android:name=".sellerProfile" />
         <activity android:name=".homePage" />
         <activity android:name=".productDiscription" />
+        <activity android:name=".editItem"/>
         <activity android:name=".register" />
         <activity android:name=".MainActivity">
             <intent-filter>
