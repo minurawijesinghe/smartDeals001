@@ -26,4 +26,44 @@
         android:scaleType="fitXY"
         android:src="@mipmap/ic_launcher"
         android:id="@+id/iv"/>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Enter the item title(ex: tooth Brush)"
+        android:id="@+id/editItemTItle"
+        android:layout_below="@+id/iv"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        />
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editItemDis"
+        android:layout_below="@+id/editItemTItle"
+        android:hint="Enter item discription here"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editItemPrice"
+        android:layout_below="@+id/editItemDis"
+        android:hint="Price (Rs)"
+        android:layout_centerHorizontal="true"
+        android:inputType="number"
+        android:layout_marginTop="10dp"/>
+
+
+    <Button
+        android:id="@+id/uploadItem"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/editItemPrice"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="53dp"
+        android:text="upload"
+        android:background="@drawable/buttonshapelogin"
+        />
+
 </RelativeLayout>

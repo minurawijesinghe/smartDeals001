@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".main">
     <EditText
-        android:id="@+id/inLEmail"
-        android:layout_width="wrap_content"
+android:id="@+id/inLEmail"        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Enter Email"
         android:layout_centerHorizontal="true"
@@ -16,8 +15,7 @@
         android:inputType="textEmailAddress"
         />
     <EditText
-        android:id="@+id/inLpass"
-        android:layout_below="@+id/inLEmail"
+android:id="@+id/inLpass"        android:layout_below="@+id/inLEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Password"
@@ -35,21 +33,10 @@
         android:layout_marginTop="450dp"
         android:textColor="#000000"
         android:typeface="serif"
-        android:text="As buyer"
+        android:layout_centerHorizontal="true"
+        android:text="Login"
         />
-    <Button
-        android:layout_width="120dp"
-        android:layout_marginTop="450dp"
-        android:layout_height="50dp"
-        android:id="@+id/buttonAdminLogin"
-        android:background="@drawable/buttonshape"
-        android:text="As Seller"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="60dp"
 
-
-
-        />
     <Button
         android:id="@+id/buttonLRegister"
         android:layout_width="200dp"
@@ -93,6 +80,8 @@
         android:layout_centerHorizontal="true"
         android:onClick="ResetPassword"
         />
+
+
 
 
 

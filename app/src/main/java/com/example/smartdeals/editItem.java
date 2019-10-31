@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -22,6 +23,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -39,23 +43,39 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
 public class editItem extends AppCompatActivity {
-    private Button btn;
+    private Button btn, upload;
     private ImageView imageview;
     private static final String IMAGE_DIRECTORY = "/demonuts";
     private int GALLERY = 1, CAMERA = 2;
     private StorageReference mStorageRef;
-    public Bitmap image1;
-   public Uri filePath;
+
+    private EditText itemTitle;
+    private EditText itemdis;
+    private EditText itemprice;
+    private String title, price, discription, test;
+    private String currentUserList;
+    private Uri downloadUri;
+
+    public Uri filePath;
+    DatabaseReference mDatabase;
+
+    public String currentUser;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_edit_item);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
 
         requestMultiplePermissions();
 
@@ -63,6 +83,21 @@ public class editItem extends AppCompatActivity {
 
         btn = (Button) findViewById(R.id.btn);
         imageview = (ImageView) findViewById(R.id.iv);
+        itemdis = (EditText) findViewById(R.id.editItemDis);
+        itemTitle = (EditText) findViewById(R.id.editItemTItle);
+        itemprice = (EditText) findViewById(R.id.editItemPrice);
+        upload = (Button) findViewById(R.id.uploadItem);
+
+        test = "abcdefghijklmnop";
+
+        upload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                upload();
+
+            }
+        });
+
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,12 +108,12 @@ public class editItem extends AppCompatActivity {
 
     }
 
-    private void showPictureDialog(){
+    private void showPictureDialog() {
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
         pictureDialog.setTitle("Select Action");
         String[] pictureDialogItems = {
                 "Select photo from gallery",
-                "Capture photo from camera" };
+                "Capture photo from camera"};
         pictureDialog.setItems(pictureDialogItems,
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -125,7 +160,6 @@ public class editItem extends AppCompatActivity {
                     Toast.makeText(editItem.this, "Image Saved!", Toast.LENGTH_SHORT).show();
 
                     imageview.setImageBitmap(bitmap);
-                    upload();
 
 
                 } catch (IOException e) {
@@ -138,7 +172,6 @@ public class editItem extends AppCompatActivity {
             Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
             imageview.setImageBitmap(thumbnail);
             saveImage(thumbnail);
-            upload();
             Toast.makeText(editItem.this, "Image Saved!", Toast.LENGTH_SHORT).show();
         }
     }
@@ -172,7 +205,7 @@ public class editItem extends AppCompatActivity {
         return "";
     }
 
-    private void  requestMultiplePermissions(){
+    private void requestMultiplePermissions() {
         Dexter.withActivity(this)
                 .withPermissions(
                         Manifest.permission.CAMERA,
@@ -208,19 +241,42 @@ public class editItem extends AppCompatActivity {
                 .check();
     }
 
-    public void upload(){
-        if(filePath != null)
-        {
+    public void upload() {
+        if (filePath != null) {
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
 
-            StorageReference ref = mStorageRef.child("images/"+ UUID.randomUUID().toString());
+            final StorageReference ref = mStorageRef.child("images/" + UUID.randomUUID().toString());
             ref.putFile(filePath)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                      String duri = uri.toString();
+                                    price = itemprice.getText().toString();
+                                    title = itemTitle.getText().toString();
+                                    discription = itemdis.getText().toString();
+
+                                    HashMap<String, String> dataMap = new HashMap<String, String>();
+
+                                    dataMap.put("Title", title);
+                                    dataMap.put("Discription", discription);
+                                    dataMap.put("Price", price);
+                                    dataMap.put("SellerID",currentUser);
+                                    dataMap.put("Uri", duri);
+
+
+
+
+                                    mDatabase.child("Items").child(title).setValue(dataMap);
+
+                                }
+                            });
                             progressDialog.dismiss();
+
                             Toast.makeText(editItem.this, "Uploaded", Toast.LENGTH_SHORT).show();
                         }
                     })
@@ -228,18 +284,25 @@ public class editItem extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             progressDialog.dismiss();
-                            Toast.makeText(editItem.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(editItem.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
                                     .getTotalByteCount());
-                            progressDialog.setMessage("Uploaded "+(int)progress+"%");
+                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
                         }
                     });
         }
-   
+
+
+
+    }
 }
-}
+
+
+
+
+

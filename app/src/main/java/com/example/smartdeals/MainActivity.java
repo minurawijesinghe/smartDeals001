@@ -16,18 +16,53 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     EditText inLpass,inLemail;
+    DatabaseReference mDatabase3;
+    String SellerList;
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
+
+      
+
+
+
         setContentView(R.layout.activity_main);
+
+
+
+
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+
+
+        mDatabase3 = FirebaseDatabase.getInstance().getReference();
+
+        mDatabase3.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                SellerList = dataSnapshot.child("SellersAuthKeys").getValue().toString();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
 
 
@@ -35,15 +70,9 @@ public class MainActivity extends AppCompatActivity {
         inLpass = (EditText)findViewById(R.id.inLpass);
         Button loginButton = (Button)findViewById(R.id.buttonLogin);
         Button registerButton = (Button)findViewById(R.id.buttonLRegister) ;
-        Button asAdmin  = (Button)findViewById(R.id.buttonAdminLogin);
+        
 
-        asAdmin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openSellerProfile();
-
-            }
-        });
+       
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 userLogin();
             }
         });
+
 
 
     }
@@ -76,6 +106,10 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, sellerProfile.class);
         startActivity(intent);
     }
+
+
+
+
     public void userLogin()
     {
 
@@ -98,7 +132,9 @@ public class MainActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Toast.makeText(MainActivity.this,"Login successful..",Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Continue();
+                            String usrId = mAuth.getCurrentUser().getUid();
+
+                            Continue( IsOccupied(usrId,SellerList));
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(MainActivity.this, "Authentication failed."+task.getException().getMessage()+"Try again",
@@ -110,13 +146,33 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    public void Continue(){
-        Intent intent = new Intent(this,homePage.class);
-        startActivity(intent);
+    public void Continue(boolean check){
+        if (check == true){
+            Intent intent = new Intent(this,sellerProfile.class);
+            startActivity(intent);
+
+        }   else {
+            Intent intent = new Intent(this, homePage.class);
+            startActivity(intent);
+        }
     }
 
+    static boolean IsOccupied(String currentUserID, String occupidelist)
+    {
+        int M = currentUserID.length();
+        int N = occupidelist.length();
+        for (int i = 0; i <= N - M; i++) {
+            int j;
 
+            for (j = 0; j < M; j++)
+                if (occupidelist.charAt(i + j) != currentUserID.charAt(j))
+                    break;
+            if (j == M)
+                return true;
+        }
+        return false;
+    }
 
-
+    
 
 }
