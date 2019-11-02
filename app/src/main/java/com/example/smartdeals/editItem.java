@@ -88,7 +88,6 @@ public class editItem extends AppCompatActivity {
         itemprice = (EditText) findViewById(R.id.editItemPrice);
         upload = (Button) findViewById(R.id.uploadItem);
 
-        test = "abcdefghijklmnop";
 
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -271,7 +270,7 @@ public class editItem extends AppCompatActivity {
 
 
 
-                                    mDatabase.child("Items").child(title).setValue(dataMap);
+                                    mDatabase.child("Items").child(title+" -"+currentUser).setValue(dataMap);
 
                                 }
                             });
