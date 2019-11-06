@@ -1,6 +1,7 @@
 package com.example.smartdeals;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -51,8 +52,11 @@ public class productDiscription extends AppCompatActivity {
 
     }
     public void openMap(){
-        Intent intent = new Intent(this, MapsActivity.class);
-        startActivity(intent);
+        Uri gmmIntentUri = Uri.parse("google.navigation:q=6.824749,79.870251");
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        startActivity(mapIntent);
+
     }
     public void openReserve(){
         //Intent intent =  new Intent(this,customer_reserve.class);

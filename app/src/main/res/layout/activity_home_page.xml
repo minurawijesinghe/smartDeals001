@@ -6,6 +6,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity">
+    <Button
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:background="@drawable/buttonshapelogin"
+        android:id="@+id/searchbutton"
+        android:layout_toRightOf="@+id/searchbar"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="15dp"
+        android:text="go"
+        
+        />
+
+
 
 
     <TextView
@@ -17,16 +30,16 @@
         android:text="Search what you want by name or the name of the shop"  />
 
     <SearchView
-        android:layout_width="350dp"
+        android:layout_width="300dp"
         android:paddingLeft="15dp"
+        android:layout_marginLeft="20dp"
         android:paddingRight="15dp"
         android:layout_height="30dp"
         android:id="@+id/searchbar"
         android:layout_marginTop="50dp"
         android:outlineAmbientShadowColor="@color/cardview_dark_background"
         android:background="#C9C6C6"
-        android:layout_centerHorizontal="true"
-        
+
 
         />
 

@@ -40,7 +40,6 @@
             android:textSize="15sp"
             android:id="@+id/textView5"
             />
-        <!--so our layout is set-->
 
     </LinearLayout>
 

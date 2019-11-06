@@ -2,6 +2,7 @@ package com.example.smartdeals;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +10,10 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,12 +24,16 @@ import androidx.appcompat.app.AppCompatActivity;
 public class homePage extends AppCompatActivity {
 
     ListView listView;
+
     String mTitle[] = {"Coca cola", "Auto mobile parts", "Digital marcketing", "Electronis", "Facebook","Potatoes"};
     String mDescription[] = {"Stand a chance to win 2 air tickets to melbourn", "10% discount on any automobile part", "Looking for a chance to promote your business on discount", "discounts on electronics up to 25%", "facebook marckeitng for free for two first two members apply","20% discount for potatoes "};
     int images[] = { R.drawable.cocacola, R.drawable.engine, R.drawable.marcketing, R.drawable.innovation,R.drawable.facebook,R.drawable.potato };
-    // so our images and other things are set in array
+    SQLiteDatabase sqLiteDatabase = openOrCreateDatabase("cockiesStore",MODE_PRIVATE,null);
 
-    // now paste some images in drawable
+    SearchView searchBar;
+    Button searchButton;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,15 +41,22 @@ public class homePage extends AppCompatActivity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_home_page);
 
+        searchBar = (SearchView) findViewById(R.id.searchbar);
+        searchButton = (Button)findViewById(R.id.searchbutton);
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
         listView = findViewById(R.id.listView);
-        // now create an adapter class
 
         MyAdapter adapter = new MyAdapter(this, mTitle, mDescription, images);
         listView.setAdapter(adapter);
-        // there is my mistake...
-        // now again check this..
 
-        // now set item click on list view
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -82,7 +96,6 @@ public class homePage extends AppCompatActivity {
                 }
             }
         });
-        // so item click is done now check list view
     }
 
     class MyAdapter extends ArrayAdapter<String> {
@@ -110,7 +123,6 @@ public class homePage extends AppCompatActivity {
             TextView myTitle = row.findViewById(R.id.textView1);
             TextView myDescription = row.findViewById(R.id.textView2);
 
-            // now set our resources on views
             images.setImageResource(rImgs[position]);
             myTitle.setText(rTitle[position]);
             myDescription.setText(rDescription[position]);

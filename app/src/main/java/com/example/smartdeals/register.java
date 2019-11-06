@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class register extends AppCompatActivity {
-    EditText inREmail,inRpass;
+    EditText inREmail,inRpass,inRpassconfirm;
     Button buttonRegisterBuyer,buttonRegisterSeler;
     public FirebaseAuth firebaseAuth;
     DatabaseReference mDatabase2;
@@ -55,6 +55,7 @@ public class register extends AppCompatActivity {
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         button = (Button)findViewById(R.id.button);
+        inRpassconfirm = (EditText)findViewById(R.id.inRpassconfirm);
 
         locationListener = new LocationListener() {
             @Override
@@ -175,11 +176,18 @@ public class register extends AppCompatActivity {
     }
     private void UserRegister(final boolean verify) {
 
-        final String email,password,name;
+        final String email,password,name,confirm;
 
         name = userName.getText().toString();
         email = inREmail.getText().toString();
         password = inRpass.getText().toString();
+        confirm = inRpassconfirm.getText().toString();
+
+        if (password!=confirm){
+            Toast.makeText(register.this,"Do not match the password and password confirm",Toast.LENGTH_SHORT).show();
+            
+        }
+
 
         if (TextUtils.isEmpty(email)||TextUtils.isEmpty(password)){
             Toast.makeText(register.this,"Empty fields are there",Toast.LENGTH_SHORT).show();
