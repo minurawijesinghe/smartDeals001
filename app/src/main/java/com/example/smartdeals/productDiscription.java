@@ -52,6 +52,7 @@ public class productDiscription extends AppCompatActivity {
 
     }
     public void openMap(){
+
         Uri gmmIntentUri = Uri.parse("google.navigation:q=6.824749,79.870251");
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         mapIntent.setPackage("com.google.android.apps.maps");

@@ -110,12 +110,6 @@ public class register extends AppCompatActivity {
             }
         });
 
-    
-
-
-
-
-
 
     mDatabase2 = FirebaseDatabase.getInstance().getReference();
 
@@ -183,10 +177,11 @@ public class register extends AppCompatActivity {
         password = inRpass.getText().toString();
         confirm = inRpassconfirm.getText().toString();
 
-        if (password!=confirm){
-            Toast.makeText(register.this,"Do not match the password and password confirm",Toast.LENGTH_SHORT).show();
+       // if (password!=confirm){
+           // Toast.makeText(register.this,"Do not match the password and password confirm",Toast.LENGTH_SHORT).show();
+            //return;
             
-        }
+        //}
 
 
         if (TextUtils.isEmpty(email)||TextUtils.isEmpty(password)){

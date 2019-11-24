@@ -10,7 +10,7 @@
         android:layout_width="50dp"
         android:layout_height="30dp"
         android:background="@drawable/buttonshapelogin"
-        android:id="@+id/searchbutton"
+        android:id="@+id/go"
         android:layout_toRightOf="@+id/searchbar"
         android:layout_marginTop="50dp"
         android:layout_marginLeft="15dp"
@@ -27,9 +27,10 @@
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:layout_marginTop="15dp"
+        android:id="@+id/output"
         android:text="Search what you want by name or the name of the shop"  />
 
-    <SearchView
+    <EditText
         android:layout_width="300dp"
         android:paddingLeft="15dp"
         android:layout_marginLeft="20dp"

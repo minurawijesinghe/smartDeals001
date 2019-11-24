@@ -26,68 +26,56 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     EditText inLpass,inLemail;
     DatabaseReference mDatabase3;
-    String SellerList;
+    String SellerList,adminID;
+
+    String userID;
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
-
-      
-
-
-
         setContentView(R.layout.activity_main);
-
-
-
-
-
-        // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
 
-        mDatabase3 = FirebaseDatabase.getInstance().getReference();
 
-        mDatabase3.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                SellerList = dataSnapshot.child("SellersAuthKeys").getValue().toString();
+            mDatabase3 = FirebaseDatabase.getInstance().getReference();
 
-            }
+            mDatabase3.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    SellerList = dataSnapshot.child("SellersAuthKeys").getValue().toString();
+                    adminID = dataSnapshot.child("admin").getValue().toString();
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
 
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
 
 
+            inLemail = (EditText) findViewById(R.id.inLEmail);
+            inLpass = (EditText) findViewById(R.id.inLpass);
+            Button loginButton = (Button) findViewById(R.id.buttonLogin);
+            Button registerButton = (Button) findViewById(R.id.buttonLRegister);
 
-        inLemail = (EditText)findViewById(R.id.inLEmail);
-        inLpass = (EditText)findViewById(R.id.inLpass);
-        Button loginButton = (Button)findViewById(R.id.buttonLogin);
-        Button registerButton = (Button)findViewById(R.id.buttonLRegister) ;
+
+            registerButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openRegisterActivity();
+                }
+            });
+
+            loginButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    userLogin();
+                }
+            });
+
         
-
-       
-
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openRegisterActivity();
-            }
-        });
-
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                userLogin();
-            }
-        });
-
 
 
     }
@@ -134,6 +122,12 @@ public class MainActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             String usrId = mAuth.getCurrentUser().getUid();
 
+                            if (adminID == usrId){
+
+                                          openAdmin();
+                                          return;
+                            }
+
                             Continue( IsOccupied(usrId,SellerList));
                         } else {
                             // If sign in fails, display a message to the user.
@@ -141,12 +135,14 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                         }
 
-                        // ...
+
                     }
                 });
     }
 
     public void Continue(boolean check){
+
+
         if (check == true){
             Intent intent = new Intent(this,sellerProfile.class);
             startActivity(intent);
@@ -159,6 +155,8 @@ public class MainActivity extends AppCompatActivity {
 
     static boolean IsOccupied(String currentUserID, String occupidelist)
     {
+
+
         int M = currentUserID.length();
         int N = occupidelist.length();
         for (int i = 0; i <= N - M; i++) {
@@ -171,6 +169,14 @@ public class MainActivity extends AppCompatActivity {
                 return true;
         }
         return false;
+    }
+
+    void openAdmin(){
+
+        Intent intent = new Intent(this,adminVerrification.class);
+        startActivity(intent);
+
+
     }
 
     
