@@ -9,6 +9,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,8 +34,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class homePage extends AppCompatActivity {
@@ -42,12 +46,28 @@ public class homePage extends AppCompatActivity {
     private FirebaseAuth title,description,image;
     DatabaseReference mDatabase3;
     DatabaseReference mDatabase4;
-    DatabaseReference mDatabase5;
-    DatabaseReference mDatabase6;
     String name;
     String titles;
     String urls;
     String descriptions;
+
+
+    ListView listView;
+    List<String> ltitle = new ArrayList<>();
+    List<String> ldescription = new ArrayList<>();
+    List<String> limages = new ArrayList<>();
+    List<String> lnames = new ArrayList<>();
+
+
+    List<String> titleList = new ArrayList<String>();
+    List<String> discriptionList = new ArrayList<String>();
+    List<String> imageList = new ArrayList<String>();
+
+
+
+    DatabaseReference mDatabase5;
+    DatabaseReference mDatabase6;
+
 
 
 
@@ -58,11 +78,7 @@ public class homePage extends AppCompatActivity {
     boolean stateCheck = false;
 
 
-    ListView listView;
-    List<String> ltitle = new ArrayList<>();
-    List<String> ldescription = new ArrayList<>();
-    List<String> limages = new ArrayList<>();
-    List<String> lnames = new ArrayList<>();
+   
     List<String> results = new ArrayList<>();
     List<String> Distances = new ArrayList<>();
 
@@ -75,16 +91,11 @@ public class homePage extends AppCompatActivity {
     List<Double> latitudes =  new ArrayList<>();
     List<Double> longitudes = new ArrayList<>();
 
-
-
-    Button go;
-    EditText searchView;
     int count =0;
 
-    String mTitle[] = {"Coca cola", "Auto mobile parts", "Digital marcketing", "Electronis", "Facebook","Potatoes"};
-    String mDescription[] = {"Stand a chance to win 2 air tickets to melbourn", "10% discount on any automobile part", "Looking for a chance to promote your business on discount", "discounts on electronics up to 25%", "facebook marckeitng for free for two first two members apply","20% discount for potatoes "};
-    int images[] = { R.drawable.cocacola, R.drawable.engine, R.drawable.marcketing, R.drawable.innovation,R.drawable.facebook,R.drawable.potato };
-   
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,10 +106,8 @@ public class homePage extends AppCompatActivity {
         mDatabase5 = FirebaseDatabase.getInstance().getReference();
         mDatabase6 = FirebaseDatabase.getInstance().getReference();
 
-
-
-
-
+        Button go = (Button)findViewById(R.id.go);
+        final EditText searchView = (EditText)findViewById(R.id.searchbar);
 
 
 
@@ -125,80 +134,69 @@ public class homePage extends AppCompatActivity {
 
             }
         });
-        go = findViewById(R.id.go);
-        searchView = findViewById(R.id.searchbar);
-
-
 
 
         go.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String SearchItem = searchView.getText().toString();
-               results =  check(lnames,SearchItem);
+                results =  check(lnames,SearchItem);
 
 
-               mDatabase5.addListenerForSingleValueEvent(new ValueEventListener() {
-                   @Override
-                   public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                mDatabase5.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                       for (int i =0; i<results.size();i++){
-                           String SellerID = dataSnapshot.child("Items").child(results.get(i)).child("SellerID").getValue().toString();
-                           SellerIDs.add(SellerID);
-                           String price = dataSnapshot.child("Items").child(results.get(i)).child("Price").getValue().toString();
+                        for (int i =0; i<results.size();i++){
+                            String SellerID = dataSnapshot.child("Items").child(results.get(i)).child("SellerID").getValue().toString();
+                            SellerIDs.add(SellerID);
+                            String price = dataSnapshot.child("Items").child(results.get(i)).child("Price").getValue().toString();
                             prices.add(price);
-                           String discript = dataSnapshot.child("Items").child(results.get(i)).child("Discription").getValue().toString();
-                           discriptions.add(discript);
-                           String title = dataSnapshot.child("Items").child(results.get(i)).child("Title").getValue().toString();
+                            String discript = dataSnapshot.child("Items").child(results.get(i)).child("Discription").getValue().toString();
+                            discriptions.add(discript);
+                            String title = dataSnapshot.child("Items").child(results.get(i)).child("Title").getValue().toString();
                             Titiles.add(title);
-                           String uri = dataSnapshot.child("Items").child(results.get(i)).child("Uri").getValue().toString();
-                              uris.add(uri);
+                            String uri = dataSnapshot.child("Items").child(results.get(i)).child("Uri").getValue().toString();
+                            uris.add(uri);
 
 
 
-                       }
+                        }
 
 
-                   }
+                    }
 
-                   @Override
-                   public void onCancelled(@NonNull DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                   }
-               });
+                    }
+                });
 
 
-               mDatabase6.addListenerForSingleValueEvent(new ValueEventListener() {
-                   @Override
-                   public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                       for (int i=0; i<results.size();i++){
+                mDatabase6.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (int i=0; i<results.size();i++){
 
-                           String lat = dataSnapshot.child(SellerIDs.get(i)).child("Location").child("Latitude").getValue().toString();
-                           String lng = dataSnapshot.child(SellerIDs.get(i)).child("Location").child("Longitude").getValue().toString();
+                            String lat = dataSnapshot.child(SellerIDs.get(i)).child("Location").child("Latitude").getValue().toString();
+                            String lng = dataSnapshot.child(SellerIDs.get(i)).child("Location").child("Longitude").getValue().toString();
 
                             latitudes.add(Double.parseDouble(lat)) ;
                             longitudes.add(Double.parseDouble(lng)) ;
 
-                       }
-                       Distances = distanceCalculate(latitudes,longitudes,tvLati,tvLongi);
-                       String  dn = "kjbv";
-                   }
+                        }
+                        Distances = distanceCalculate(latitudes,longitudes,tvLati,tvLongi);
 
-                   @Override
-                   public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
 
-                   }
-               });
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
+                    }
+                });
 
-
-
-
-
-
-
-
+                nextActivity();
 
 
             }
@@ -207,29 +205,44 @@ public class homePage extends AppCompatActivity {
 
 
 
-            mDatabase4.addListenerForSingleValueEvent(new ValueEventListener() {
 
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot){
-                    for (int i=0;i<count;i++) {
+        mDatabase4.addListenerForSingleValueEvent(new ValueEventListener() {
+            List<Integer> indexes = new ArrayList<>();
 
-                        final String currentName = lnames.get(i);
-                        titles = dataSnapshot.child("Items").child(currentName).child("Title").getValue().toString();
-                        ltitle.add(titles);
-                        urls = dataSnapshot.child("Items").child(currentName).child("Uri").getValue().toString();
-                        limages.add(urls);
-                        descriptions = dataSnapshot.child("Items").child(currentName).child("Discription").getValue().toString();
-                        ldescription.add(descriptions);
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot){
+                for (int i=0;i<count;i++) {
 
-                    }
+                    final String currentName = lnames.get(i);
+                    titles = dataSnapshot.child("Items").child(currentName).child("Title").getValue().toString();
+                    ltitle.add(titles);
+                    urls = dataSnapshot.child("Items").child(currentName).child("Uri").getValue().toString();
+                    limages.add(urls);
+
+
+                    descriptions = dataSnapshot.child("Items").child(currentName).child("Discription").getValue().toString();
+                    ldescription.add(descriptions);
+
+                         indexes.add(i);
+
+
+                }
+                Collections.shuffle(indexes);
+                for (int i=0;i<count;i++){
+                    titleList.add(ltitle.get(indexes.get(i)));
+                    imageList.add(limages.get(indexes.get(i)));
+                    discriptionList.add(ldescription.get(indexes.get(i)));
+
 
                 }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
 
-                }
-            });
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -243,7 +256,7 @@ public class homePage extends AppCompatActivity {
                 tvLati =("  " +location.getLatitude()  ) ;
                 tvLongi  =("  " +location.getLongitude()  ) ;
                 progressDialog4.dismiss();
-                
+
             }
 
             @Override
@@ -292,14 +305,15 @@ public class homePage extends AppCompatActivity {
 
 
 
-
         listView = findViewById(R.id.listView);
         // now create an adapter class
-
-        MyAdapter adapter = new MyAdapter(this, mTitle, mDescription, images);
+        final ProgressDialog progressDialog7 = new ProgressDialog(this);
+        progressDialog7.setTitle("downloading content");
+        progressDialog7.show();
+        MyAdapter adapter = new MyAdapter(this, titleList, discriptionList, imageList);
         listView.setAdapter(adapter);
 
-
+         progressDialog7.dismiss();
 
 
         // now set item click on list view
@@ -348,16 +362,16 @@ public class homePage extends AppCompatActivity {
     class MyAdapter extends ArrayAdapter<String> {
 
         Context context;
-        String rTitle[];
-        String rDescription[];
-        int rImgs[];
-
-        MyAdapter (Context c, String title[], String description[], int imgs[]) {
-            super(c, R.layout.row_homepage, R.id.textView1, title);
+        List<String> rTitle;
+        List<String> rDescription;
+        List<String> rImgs;
+        MyAdapter (Context c,List<String> ltitle, List<String> ldescription,List<String> limages) {
+            super(c, R.layout.row_homepage, R.id.textView1, ltitle);
             this.context = c;
-            this.rTitle = title;
-            this.rDescription = description;
-            this.rImgs = imgs;
+            this.rTitle = ltitle;
+            this.rDescription = ldescription;
+            this.rImgs = limages;
+
 
         }
 
@@ -366,20 +380,23 @@ public class homePage extends AppCompatActivity {
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             LayoutInflater layoutInflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View row = layoutInflater.inflate(R.layout.row_homepage, parent, false);
-            ImageView images = row.findViewById(R.id.image);
+
+            ImageView images =row.findViewById(R.id.image);
             TextView myTitle = row.findViewById(R.id.textView1);
             TextView myDescription = row.findViewById(R.id.textView2);
 
-            // now set our resources on views
-            images.setImageResource(rImgs[position]);
-            myTitle.setText(rTitle[position]);
-            myDescription.setText(rDescription[position]);
+
+            Picasso.with(context).load(rImgs.get(position)).into(images);
+
+            myTitle.setText(rTitle.get(position));
+            myDescription.setText(rDescription.get(position));
 
 
 
 
             return row;
         }
+
     }
 
     public void openProductDiscriptio(){
@@ -391,26 +408,26 @@ public class homePage extends AppCompatActivity {
     public List check(List<String >names ,String toSearch ){
 
         List<String> results = new ArrayList<>();
-             for(int i =0;i<names.size();i++){
-                 String test = names.get(i);
+        for(int i =0;i<names.size();i++){
+            String test = names.get(i);
 
-                 boolean seqFound = test.contains(toSearch);
+            boolean seqFound = test.contains(toSearch);
 
-                 if (seqFound == true){
+            if (seqFound == true){
 
-                     results.add(names.get(i));
+                results.add(names.get(i));
 
-                 }
+            }
 
-             }
+        }
 
-            return    results;
+        return    results;
 
 
     }
     public List distanceCalculate(List<Double>latitudes,List<Double>longitudes,String currentLati,String CurrentLongi){
 
-         List<Double> Distances = new ArrayList<>();
+        List<Double> Distances = new ArrayList<>();
 
         Location locationC = new Location("");
         locationC.setLatitude(Double.parseDouble(currentLati));
@@ -420,18 +437,29 @@ public class homePage extends AppCompatActivity {
 
         for (int i=0;i<latitudes.size();i++){
 
-           Location Shop = new Location("");
-           Shop.setLatitude(latitudes.get(i));
-           Shop.setLongitude(longitudes.get(i));
+            Location Shop = new Location("");
+            Shop.setLatitude(latitudes.get(i));
+            Shop.setLongitude(longitudes.get(i));
 
-           double distanceInMeters = locationC.distanceTo(Shop);
-           Distances.add(distanceInMeters);
+            double distanceInMeters = locationC.distanceTo(Shop);
+            Distances.add(distanceInMeters);
 
 
 
         }
 
-       return Distances;
+        return Distances;
+
+    }
+    public void nextActivity(){
+        Intent intent  = new Intent(this,searchedList.class);
+        intent.putExtra("titleList", (Serializable) Titiles);
+        intent.putExtra("imageList", (Serializable) uris);
+        intent.putExtra("discriptionList", (Serializable)  discriptions);
+
+        startActivity(intent);
+
+
 
     }
 
