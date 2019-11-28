@@ -9,7 +9,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +49,7 @@ public class homePage extends AppCompatActivity {
     String titles;
     String urls;
     String descriptions;
+    String price;
 
 
     ListView listView;
@@ -57,11 +57,24 @@ public class homePage extends AppCompatActivity {
     List<String> ldescription = new ArrayList<>();
     List<String> limages = new ArrayList<>();
     List<String> lnames = new ArrayList<>();
+    List<String> lprices = new ArrayList<>();
+    List<String> lname = new ArrayList<>();
+
+
+    List<String> sortedPrices = new ArrayList<>();
+    List<String> sortedDiscriptios = new ArrayList<>();
+    List<String> sortedUris = new ArrayList<>();
+    List<String> sortedTitle = new ArrayList<>();
+    List<String> sortedAuths = new ArrayList<>();
+    List<Double> sortedDistance = new ArrayList<>();
+
+    List<String>productSummary =  new ArrayList<String>();
 
 
     List<String> titleList = new ArrayList<String>();
     List<String> discriptionList = new ArrayList<String>();
     List<String> imageList = new ArrayList<String>();
+    List<String>pricelist = new ArrayList<String>();
 
 
 
@@ -80,11 +93,11 @@ public class homePage extends AppCompatActivity {
 
    
     List<String> results = new ArrayList<>();
-    List<String> Distances = new ArrayList<>();
+    List<Double> Distances = new ArrayList<>();
 
 
     List<String> SellerIDs = new ArrayList<>();
-    List<String> prices  =new ArrayList<>();
+    List<String> pricesSList =new ArrayList<>();
     List<String> discriptions  =new ArrayList<>();
     List<String> Titiles  =new ArrayList<>();
     List<String> uris = new ArrayList<>();
@@ -142,8 +155,6 @@ public class homePage extends AppCompatActivity {
                 String SearchItem = searchView.getText().toString();
                 results =  check(lnames,SearchItem);
 
-
-
                 mDatabase5.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -152,7 +163,7 @@ public class homePage extends AppCompatActivity {
                             String SellerID = dataSnapshot.child("Items").child(results.get(i)).child("SellerID").getValue().toString();
                             SellerIDs.add(SellerID);
                             String price = dataSnapshot.child("Items").child(results.get(i)).child("Price").getValue().toString();
-                            prices.add(price);
+                            pricelist.add(price);
                             String discript = dataSnapshot.child("Items").child(results.get(i)).child("Discription").getValue().toString();
                             discriptions.add(discript);
                             String title = dataSnapshot.child("Items").child(results.get(i)).child("Title").getValue().toString();
@@ -173,7 +184,6 @@ public class homePage extends AppCompatActivity {
                     }
                 });
 
-
                 mDatabase6.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -182,11 +192,13 @@ public class homePage extends AppCompatActivity {
                             String lat = dataSnapshot.child(SellerIDs.get(i)).child("Location").child("Latitude").getValue().toString();
                             String lng = dataSnapshot.child(SellerIDs.get(i)).child("Location").child("Longitude").getValue().toString();
 
-                            latitudes.add(Double.parseDouble(lat)) ;
-                            longitudes.add(Double.parseDouble(lng)) ;
+                            latitudes.add(Double.parseDouble(lat));
+                            longitudes.add(Double.parseDouble(lng));
 
                         }
                         Distances = distanceCalculate(latitudes,longitudes,tvLati,tvLongi);
+
+                        sorting(Distances,results,pricelist,Titiles,uris,discriptions) ;
 
                     }
 
@@ -196,7 +208,9 @@ public class homePage extends AppCompatActivity {
                     }
                 });
 
+
                 nextActivity();
+
 
 
             }
@@ -218,6 +232,8 @@ public class homePage extends AppCompatActivity {
                     ltitle.add(titles);
                     urls = dataSnapshot.child("Items").child(currentName).child("Uri").getValue().toString();
                     limages.add(urls);
+                    price = dataSnapshot.child("Items").child(currentName).child("Price").getValue().toString();
+                    lprices.add(price);
 
 
                     descriptions = dataSnapshot.child("Items").child(currentName).child("Discription").getValue().toString();
@@ -232,6 +248,7 @@ public class homePage extends AppCompatActivity {
                     titleList.add(ltitle.get(indexes.get(i)));
                     imageList.add(limages.get(indexes.get(i)));
                     discriptionList.add(ldescription.get(indexes.get(i)));
+                    pricesSList.add(lprices.get(indexes.get(i)));
 
 
                 }
@@ -310,7 +327,7 @@ public class homePage extends AppCompatActivity {
         final ProgressDialog progressDialog7 = new ProgressDialog(this);
         progressDialog7.setTitle("downloading content");
         progressDialog7.show();
-        MyAdapter adapter = new MyAdapter(this, titleList, discriptionList, imageList);
+        MyAdapter adapter = new MyAdapter(this, titleList, discriptionList,imageList,pricesSList);
         listView.setAdapter(adapter);
 
          progressDialog7.dismiss();
@@ -320,43 +337,11 @@ public class homePage extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position ==  0) {
-                    Toast.makeText(homePage.this, "Coca cola Description", Toast.LENGTH_SHORT).show();
-                    openProductDiscriptio();
-                }
-                if (position ==  1) {
-                    Toast.makeText(homePage.this, "Automobile Description", Toast.LENGTH_SHORT).show();
-                    openProductDiscriptio();
+                Toast.makeText(homePage.this,Integer.toString(position),Toast.LENGTH_SHORT).show();
 
-                }
-                if (position ==  2) {
-                    Toast.makeText(homePage.this, "Digital marcketing Description", Toast.LENGTH_SHORT).show();
-                    openProductDiscriptio();
-
-                }
-                if (position ==  3) {
-                    Toast.makeText(homePage.this, "Electronics Description", Toast.LENGTH_SHORT).show();
-                    openProductDiscriptio();
-
-                }
-                if (position ==  4) {
-                    Toast.makeText(homePage.this, "Facebook marcketing Description", Toast.LENGTH_SHORT).show();
-                    openProductDiscriptio();
-
-                }
-                if (position ==  5) {
-                    Toast.makeText(homePage.this, "Facebook marcketing Description", Toast.LENGTH_SHORT).show();
-                    openProductDiscriptio();
-
-                }
-                if (position ==  6) {
-                    Toast.makeText(homePage.this, "Facebook marcketing Description", Toast.LENGTH_SHORT).show();
-                    openProductDiscriptio();
-
-                }
+               openProductDiscription(position);
             }
         });
-        // so item click is done now check list view
     }
 
     class MyAdapter extends ArrayAdapter<String> {
@@ -365,12 +350,14 @@ public class homePage extends AppCompatActivity {
         List<String> rTitle;
         List<String> rDescription;
         List<String> rImgs;
-        MyAdapter (Context c,List<String> ltitle, List<String> ldescription,List<String> limages) {
+        List<String>rPrices;
+        MyAdapter (Context c,List<String> ltitle, List<String> ldescription,List<String> limages,List<String>lprices) {
             super(c, R.layout.row_homepage, R.id.textView1, ltitle);
             this.context = c;
             this.rTitle = ltitle;
             this.rDescription = ldescription;
             this.rImgs = limages;
+            this.rPrices=lprices;
 
 
         }
@@ -384,12 +371,14 @@ public class homePage extends AppCompatActivity {
             ImageView images =row.findViewById(R.id.image);
             TextView myTitle = row.findViewById(R.id.textView1);
             TextView myDescription = row.findViewById(R.id.textView2);
+            TextView myPrice = row.findViewById(R.id.textView3);
 
 
-            Picasso.with(context).load(rImgs.get(position)).into(images);
+            Picasso.get().load(rImgs.get(position)).into(images);
 
             myTitle.setText(rTitle.get(position));
             myDescription.setText(rDescription.get(position));
+            myPrice.setText("Rs."+rPrices.get(position)+".00");
 
 
 
@@ -398,9 +387,17 @@ public class homePage extends AppCompatActivity {
         }
 
     }
+   
 
-    public void openProductDiscriptio(){
+    public void openProductDiscription(int index){
+
+        productSummary.add(titleList.get(index));
+        productSummary.add(discriptionList.get(index));
+        productSummary.add(imageList.get(index));
+        productSummary.add(pricesSList.get(index));
+
         Intent intent = new Intent(this,productDiscription.class);
+        intent.putExtra("productSummary",(Serializable) productSummary);
         startActivity(intent);
 
 
@@ -456,10 +453,56 @@ public class homePage extends AppCompatActivity {
         intent.putExtra("titleList", (Serializable) Titiles);
         intent.putExtra("imageList", (Serializable) uris);
         intent.putExtra("discriptionList", (Serializable)  discriptions);
+        intent.putExtra("priceList",(Serializable) pricelist);
 
         startActivity(intent);
 
 
+
+    }
+    public void sorting(List<Double> dist, List<String> key,List<String>price,List<String> titel,List<String>uri,List<String>dis)
+    {
+        Double tempDist;
+        String tempSt="";
+        String temp="";
+        String temti;
+        String tempU;
+        String temd;
+        for(int i=0;i<dist.size();i++)
+        {
+            for(int j=i+1;j<dist.size();j++)
+            {
+                if (dist.get(i) > dist.get(j)) {
+                    tempDist = dist.get(i);
+                    tempSt=key.get(i);
+                    temp=price.get(i);
+                    temti=titel.get(i);
+                    tempU=uri.get(i);
+                    temd=dis.get(i);
+
+                    dist.set(i,dist.get(j));
+                    key.set(i,key.get(j));
+                    price.set(i,price.get(j));
+                    titel.set(i,titel.get(j));
+                    uri.set(i,uri.get(j));
+                    dis.set(i,dis.get(j)) ;
+
+                    dist.set(j,tempDist);
+                    key.set(j,tempSt);
+                    price.set(j,temp) ;
+                    titel.set(j,temti) ;
+                    uri.set(j,tempU);
+                    dis.set(j,temd)  ;
+                }
+            }
+        }
+
+        sortedAuths = key;
+        sortedDiscriptios = dis;
+        sortedDistance = dist;
+        sortedPrices = price;
+        sortedTitle = titel;
+        sortedUris=  uri;
 
     }
 

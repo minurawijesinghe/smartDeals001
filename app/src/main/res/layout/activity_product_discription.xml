@@ -10,11 +10,10 @@
 
     <ImageView
         android:id="@+id/imageproduct"
-        android:layout_width="150dp"
+        android:layout_width="200dp"
          android:layout_marginTop="15dp"
-        android:layout_height="300dp"
+        android:layout_height="200dp"
         android:padding="7dp"
-        android:background="@drawable/cocacola"
         android:layout_centerHorizontal="true"/>
 
     <TextView
@@ -50,6 +49,17 @@
         android:layout_below="@+id/offerDiscription"
         android:layout_marginTop="20dp"
         android:textColor="#0B61F7"
+        />
+    <TextView
+        android:id="@+id/price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Price "
+        android:layout_below="@id/seller"
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
+        style="@android:style/TextAppearance.Holo.Medium"
+        android:layout_marginTop="20dp"
         />
     <RelativeLayout
         android:layout_width="match_parent"
@@ -126,7 +136,6 @@
             style="@style/QuantityPickerButtonStyle"
             android:layout_marginBottom="50dp"
             android:layout_toRightOf="@+id/quantity_text_view"
-            android:onClick="increment"
             android:text="+"
             android:textColor="#1F1F1F"
             android:textSize="20dp"
@@ -144,7 +153,6 @@
             android:layout_toRightOf="@+id/ButtonDecrement"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:text="@string/initial_quantity_value"
             android:textColor="@android:color/black"
             android:textSize="25dp"
             android:background="#C5C2C2"

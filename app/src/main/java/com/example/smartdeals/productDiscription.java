@@ -11,7 +11,18 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class productDiscription extends AppCompatActivity {
+
+    int quantityInt =0;
+    DatabaseReference mdatabase8;
+    List<String> productSummary = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +31,45 @@ public class productDiscription extends AppCompatActivity {
         Button locate = (Button)findViewById(R.id.buttonLocate);
         Button reserve = (Button)findViewById(R.id.buttonResevre);
         TextView seller = (TextView) findViewById(R.id.seller);
+        final TextView quantity = (TextView)findViewById(R.id.quantity_text_view);
+        final Button increment = (Button) findViewById(R.id.buttonIncrement);
+        final Button decrement = (Button)findViewById(R.id.ButtonDecrement);
+        Intent intent = getIntent();
+        ImageView imageView =(ImageView)findViewById(R.id.imageproduct);
+        TextView discript = (TextView)findViewById(R.id.offerDiscription);
+        TextView titl = (TextView)findViewById(R.id.productdescription);
+        TextView price = (TextView)findViewById(R.id.price);
+        productSummary = intent.getStringArrayListExtra("productSummary");
+        discript.setText(productSummary.get(1));
+        titl.setText(productSummary.get(0));
+        price.setText(productSummary.get(3));
+
+
+        mdatabase8 = FirebaseDatabase.getInstance().getReference();
+
+
+        Picasso.get().load(productSummary.get(2)).into(imageView);
+
+
+        quantity.setHint("0");
+
+
+        increment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                quantityInt = increment(quantityInt);
+                quantity.setText(Integer.toString(quantityInt));
+            }
+        });
+        decrement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                quantityInt = decrement(quantityInt);
+
+                quantity.setText(Integer.toString(quantityInt));
+            }
+        });
+
 
 
 
@@ -72,6 +122,21 @@ public class productDiscription extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public   int increment(int quantityInt){
+             if (quantityInt<5){
+        quantityInt++;           }
+
+          return quantityInt;
+
+    }
+    public  int decrement(int quantityInt){
+
+        if (quantityInt>0){
+            quantityInt--;
+
+        }
+        return quantityInt;
+    }
 
 
 }
