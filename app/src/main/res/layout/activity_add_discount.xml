@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="visible"
+    tools:context=".addDiscount">
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:autoSizeTextType="uniform"
+        android:text="Add Discount"
+        android:typeface="sans"
+        android:textColor="#9B9999"
+        />
+    <EditText
+        android:id="@+id/discountAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Discount Percentage(%)"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="150dp"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/discountAmount"
+        android:layout_marginTop="50dp"
+        android:hint="previous value"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/previousPrice"
+
+
+
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/previousPrice"
+        android:layout_marginTop="20dp"
+        android:id="@+id/currentPrice"
+        android:hint="current value"
+        android:layout_centerHorizontal="true"
+
+
+        />
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:background="@drawable/buttonshape"
+        android:text="launch discount"
+        android:id="@+id/lauchDis"
+        android:layout_below="@+id/currentPrice"
+        android:layout_marginTop="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp"
+
+
+        />
+    <Button
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+       android:id="@+id/backButton"
+        android:layout_below="@+id/lauchDis"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/backbutton"
+        />
+
+    
+
+
+</RelativeLayout>

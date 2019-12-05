@@ -57,9 +57,7 @@ public class editItem extends AppCompatActivity {
     private EditText itemTitle;
     private EditText itemdis;
     private EditText itemprice;
-    private String title, price, discription, test;
-    private String currentUserList;
-    private Uri downloadUri;
+    private String title, price, discription;
 
     public Uri filePath;
     DatabaseReference mDatabase;
@@ -180,7 +178,7 @@ public class editItem extends AppCompatActivity {
         myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
         File wallpaperDirectory = new File(
                 Environment.getExternalStorageDirectory() + IMAGE_DIRECTORY);
-        // have the object build the directory structure, if needed.
+
         if (!wallpaperDirectory.exists()) {
             wallpaperDirectory.mkdirs();
         }
@@ -258,6 +256,7 @@ public class editItem extends AppCompatActivity {
                                     price = itemprice.getText().toString();
                                     title = itemTitle.getText().toString();
                                     discription = itemdis.getText().toString();
+                                    String discount = "0";
 
                                     HashMap<String, String> dataMap = new HashMap<String, String>();
 
@@ -266,6 +265,7 @@ public class editItem extends AppCompatActivity {
                                     dataMap.put("Price", price);
                                     dataMap.put("SellerID",currentUser);
                                     dataMap.put("Uri", duri);
+                                    dataMap.put("Discount",discount);
 
 
 

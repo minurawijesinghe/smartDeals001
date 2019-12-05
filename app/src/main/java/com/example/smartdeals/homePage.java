@@ -50,13 +50,15 @@ public class homePage extends AppCompatActivity {
     String urls;
     String descriptions;
     String price;
+    String shopName;
+    String nameGet;
 
 
     ListView listView;
     List<String> ltitle = new ArrayList<>();
     List<String> ldescription = new ArrayList<>();
     List<String> limages = new ArrayList<>();
-    List<String> lnames = new ArrayList<>();
+    public static List<String> lnames = new ArrayList<>();
     List<String> lprices = new ArrayList<>();
     List<String> lname = new ArrayList<>();
 
@@ -67,6 +69,8 @@ public class homePage extends AppCompatActivity {
     List<String> sortedTitle = new ArrayList<>();
     List<String> sortedAuths = new ArrayList<>();
     List<Double> sortedDistance = new ArrayList<>();
+    List<String>sortedNames =  new ArrayList<>();
+    List<String>sortedDistancesStrings = new ArrayList<String>();
 
     List<String>productSummary =  new ArrayList<String>();
 
@@ -75,6 +79,7 @@ public class homePage extends AppCompatActivity {
     List<String> discriptionList = new ArrayList<String>();
     List<String> imageList = new ArrayList<String>();
     List<String>pricelist = new ArrayList<String>();
+    List<String>nameList = new ArrayList<String>();
 
 
 
@@ -100,14 +105,23 @@ public class homePage extends AppCompatActivity {
     List<String> pricesSList =new ArrayList<>();
     List<String> discriptions  =new ArrayList<>();
     List<String> Titiles  =new ArrayList<>();
+    List<String>shopNames = new ArrayList<>();
     List<String> uris = new ArrayList<>();
     List<Double> latitudes =  new ArrayList<>();
     List<Double> longitudes = new ArrayList<>();
 
     int count =0;
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Titiles.clear();
+        discriptions.clear();
+        pricelist.clear();
+        uris.clear();
+        productSummary.clear();
 
-
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,11 +141,13 @@ public class homePage extends AppCompatActivity {
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Downloading content ..!");
         progressDialog.show();
+        //this database reference for get the names of the items in the list in database
         mDatabase3.child("Items").addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    //get the namse to list
                     name = ds.getKey();
                     count++;
                     lnames.add(name);
@@ -152,8 +168,14 @@ public class homePage extends AppCompatActivity {
         go.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //getting the input in the search box
                 String SearchItem = searchView.getText().toString();
+                //checck the database with the key word
                 results =  check(lnames,SearchItem);
+
+
+
+                //this database listener for get other details of the searched products
 
                 mDatabase5.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -170,9 +192,8 @@ public class homePage extends AppCompatActivity {
                             Titiles.add(title);
                             String uri = dataSnapshot.child("Items").child(results.get(i)).child("Uri").getValue().toString();
                             uris.add(uri);
-
-
-
+                           // shopName = dataSnapshot.child("Items").child(results.get(i)).child("name").getValue().toString();
+                           // shopNames.add(shopName);
                         }
 
 
@@ -184,6 +205,7 @@ public class homePage extends AppCompatActivity {
                     }
                 });
 
+                //this data base reference is for   get the location corintes od the shop for the distance calculation
                 mDatabase6.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -199,6 +221,7 @@ public class homePage extends AppCompatActivity {
                         Distances = distanceCalculate(latitudes,longitudes,tvLati,tvLongi);
 
                         sorting(Distances,results,pricelist,Titiles,uris,discriptions) ;
+                        nextActivity();
 
                     }
 
@@ -209,7 +232,6 @@ public class homePage extends AppCompatActivity {
                 });
 
 
-                nextActivity();
 
 
 
@@ -222,7 +244,7 @@ public class homePage extends AppCompatActivity {
 
         mDatabase4.addListenerForSingleValueEvent(new ValueEventListener() {
             List<Integer> indexes = new ArrayList<>();
-
+              // getting the database list of all items
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot){
                 for (int i=0;i<count;i++) {
@@ -243,6 +265,7 @@ public class homePage extends AppCompatActivity {
 
 
                 }
+                //this function is used to shuffle the all lists in the same order
                 Collections.shuffle(indexes);
                 for (int i=0;i<count;i++){
                     titleList.add(ltitle.get(indexes.get(i)));
@@ -261,7 +284,7 @@ public class homePage extends AppCompatActivity {
             }
         });
 
-
+           //this cosde is for get the users current location
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         final ProgressDialog progressDialog4 = new ProgressDialog(this);
         progressDialog4.setTitle("Downloading content ..!");
@@ -450,24 +473,29 @@ public class homePage extends AppCompatActivity {
     }
     public void nextActivity(){
         Intent intent  = new Intent(this,searchedList.class);
-        intent.putExtra("titleList", (Serializable) Titiles);
-        intent.putExtra("imageList", (Serializable) uris);
-        intent.putExtra("discriptionList", (Serializable)  discriptions);
-        intent.putExtra("priceList",(Serializable) pricelist);
+        intent.putExtra("titleList", (Serializable) sortedTitle);
+        intent.putExtra("imageList", (Serializable) sortedUris);
+        intent.putExtra("discriptionList", (Serializable)  sortedDiscriptios);
+        intent.putExtra("priceList",(Serializable) sortedPrices);
+
 
         startActivity(intent);
 
 
 
     }
-    public void sorting(List<Double> dist, List<String> key,List<String>price,List<String> titel,List<String>uri,List<String>dis)
+
+    
+
+
+   public void sorting(List<Double> dist, List<String> key,List<String>price,List<String> titel,List<String>uri,List<String>dis)
     {
         Double tempDist;
         String tempSt="";
         String temp="";
-        String temti;
-        String tempU;
-        String temd;
+        String temti="";
+        String tempU="";
+        String temd="";
         for(int i=0;i<dist.size();i++)
         {
             for(int j=i+1;j<dist.size();j++)
@@ -497,12 +525,25 @@ public class homePage extends AppCompatActivity {
             }
         }
 
+
+
+
         sortedAuths = key;
         sortedDiscriptios = dis;
         sortedDistance = dist;
         sortedPrices = price;
         sortedTitle = titel;
         sortedUris=  uri;
+
+
+
+       // List<Double> ds = new ArrayList<Double>();
+// fill ds with Doubles
+        List<String> strings = new ArrayList<String>();
+        for (Double d : sortedDistance) {
+            // Apply formatting to the string if necessary
+            sortedDistancesStrings.add(d.toString());
+        }
 
     }
 

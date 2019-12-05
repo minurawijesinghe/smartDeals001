@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +31,15 @@ public class searchedList extends AppCompatActivity {
     List<String> imageList = new ArrayList<>();
     List<String> priceList = new ArrayList<>();
 
+
+    List<String> productSummary = new ArrayList<>();
+
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        productSummary.clear();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +67,7 @@ public class searchedList extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                openProductDiscription();
+                openProductDiscription(position);
             }
         });
         // so item click is done now check list view
@@ -112,6 +122,19 @@ public class searchedList extends AppCompatActivity {
 
             return row;
         }
+
+    }
+    public void openProductDiscription(int index){
+
+        productSummary.add(titleList.get(index));
+        productSummary.add(discriptionList.get(index));
+        productSummary.add(imageList.get(index));
+        productSummary.add(priceList.get(index));
+
+        Intent intent = new Intent(this,productDiscription.class);
+        intent.putExtra("productSummary",(Serializable) productSummary);
+        startActivity(intent);
+
 
     }
     
