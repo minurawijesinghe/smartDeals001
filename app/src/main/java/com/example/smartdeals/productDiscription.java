@@ -28,6 +28,11 @@ public class productDiscription extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_discription);
+
+
+
+
+
         Button locate = (Button)findViewById(R.id.buttonLocate);
         Button reserve = (Button)findViewById(R.id.buttonResevre);
         TextView seller = (TextView) findViewById(R.id.seller);
@@ -43,6 +48,9 @@ public class productDiscription extends AppCompatActivity {
         discript.setText(productSummary.get(1));
         titl.setText(productSummary.get(0));
         price.setText(productSummary.get(3));
+        seller.setText(productSummary.get(4));
+        
+        ;
 
 
         mdatabase8 = FirebaseDatabase.getInstance().getReference();

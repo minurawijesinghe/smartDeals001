@@ -66,6 +66,22 @@
 
 
         />
+    <Button
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="270dp"
+
+        android:background="@drawable/newbuttonshape"
+        android:text="Show list"
+        android:id="@+id/listShow"
+        android:textColor="#000000"
+        android:textSize="10sp"
+        android:layout_below="@+id/profileDiscription"
+        android:typeface="sans"
+        tools:layout_editor_absoluteX="312dp"
+        tools:layout_editor_absoluteY="2dp"
+        android:layout_width="140dp"
+        android:layout_height="30dp"
+        />
 
 
 

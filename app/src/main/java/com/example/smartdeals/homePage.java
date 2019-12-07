@@ -50,8 +50,6 @@ public class homePage extends AppCompatActivity {
     String urls;
     String descriptions;
     String price;
-    String shopName;
-    String nameGet;
 
 
     ListView listView;
@@ -60,7 +58,7 @@ public class homePage extends AppCompatActivity {
     List<String> limages = new ArrayList<>();
     public static List<String> lnames = new ArrayList<>();
     List<String> lprices = new ArrayList<>();
-    List<String> lname = new ArrayList<>();
+
 
 
     List<String> sortedPrices = new ArrayList<>();
@@ -69,7 +67,6 @@ public class homePage extends AppCompatActivity {
     List<String> sortedTitle = new ArrayList<>();
     List<String> sortedAuths = new ArrayList<>();
     List<Double> sortedDistance = new ArrayList<>();
-    List<String>sortedNames =  new ArrayList<>();
     List<String>sortedDistancesStrings = new ArrayList<String>();
 
     List<String>productSummary =  new ArrayList<String>();
@@ -79,7 +76,7 @@ public class homePage extends AppCompatActivity {
     List<String> discriptionList = new ArrayList<String>();
     List<String> imageList = new ArrayList<String>();
     List<String>pricelist = new ArrayList<String>();
-    List<String>nameList = new ArrayList<String>();
+    List<String>shops = new ArrayList<>();
 
 
 
@@ -93,7 +90,7 @@ public class homePage extends AppCompatActivity {
     private LocationListener locationListener;
     public static String tvLongi;
     public static String tvLati;
-    boolean stateCheck = false;
+    String shop;
 
 
    
@@ -109,6 +106,7 @@ public class homePage extends AppCompatActivity {
     List<String> uris = new ArrayList<>();
     List<Double> latitudes =  new ArrayList<>();
     List<Double> longitudes = new ArrayList<>();
+    List<String>shopList = new ArrayList<>();
 
     int count =0;
 
@@ -192,8 +190,9 @@ public class homePage extends AppCompatActivity {
                             Titiles.add(title);
                             String uri = dataSnapshot.child("Items").child(results.get(i)).child("Uri").getValue().toString();
                             uris.add(uri);
-                           // shopName = dataSnapshot.child("Items").child(results.get(i)).child("name").getValue().toString();
-                           // shopNames.add(shopName);
+                            //String shopNa = dataSnapshot.child("Items").child(results.get(i)).child("name")
+                          //  .getValue().toString();
+                           // shopNames.add(shopNa);
                         }
 
 
@@ -260,18 +259,21 @@ public class homePage extends AppCompatActivity {
 
                     descriptions = dataSnapshot.child("Items").child(currentName).child("Discription").getValue().toString();
                     ldescription.add(descriptions);
+                    shop = dataSnapshot.child("Items").child(currentName).child("name").getValue().toString();
+                    shopNames.add(shop);
+
 
                          indexes.add(i);
 
 
                 }
-                //this function is used to shuffle the all lists in the same order
                 Collections.shuffle(indexes);
                 for (int i=0;i<count;i++){
                     titleList.add(ltitle.get(indexes.get(i)));
                     imageList.add(limages.get(indexes.get(i)));
                     discriptionList.add(ldescription.get(indexes.get(i)));
                     pricesSList.add(lprices.get(indexes.get(i)));
+                    shopList.add(shopNames.get(i));
 
 
                 }
@@ -418,6 +420,8 @@ public class homePage extends AppCompatActivity {
         productSummary.add(discriptionList.get(index));
         productSummary.add(imageList.get(index));
         productSummary.add(pricesSList.get(index));
+        productSummary.add(shopList.get(index));
+
 
         Intent intent = new Intent(this,productDiscription.class);
         intent.putExtra("productSummary",(Serializable) productSummary);

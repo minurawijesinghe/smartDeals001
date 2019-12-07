@@ -35,7 +35,7 @@ public class addDiscount extends AppCompatActivity {
 
 
 
-        back.setOnClickListener(new View.OnClickListener() {
+        launchDis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String percentage = discountPercentage.getText().toString();
@@ -47,8 +47,5 @@ public class addDiscount extends AppCompatActivity {
                 }
             }
         });
-
-
-
     }
 }
