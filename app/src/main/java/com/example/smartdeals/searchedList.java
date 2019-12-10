@@ -30,6 +30,8 @@ public class searchedList extends AppCompatActivity {
     List<String> discriptionList = new ArrayList<>();
     List<String> imageList = new ArrayList<>();
     List<String> priceList = new ArrayList<>();
+    List<String>sellersList = new ArrayList<>();
+    List<String>productName = new ArrayList<>();
 
 
     List<String> productSummary = new ArrayList<>();
@@ -39,6 +41,16 @@ public class searchedList extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         productSummary.clear();
+    }
+    @Override
+    public void onBackPressed() {
+
+
+        Intent intent = new Intent(this, homePage.class);      //I suppose they are in same package
+
+        //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+
     }
 
     @Override
@@ -50,8 +62,11 @@ public class searchedList extends AppCompatActivity {
         titleList = intent.getStringArrayListExtra("titleList");
         imageList = intent.getStringArrayListExtra("imageList");
 
-        discriptionList = intent.getStringArrayListExtra("titleList");
+        discriptionList = intent.getStringArrayListExtra("discriptionList");
         priceList = intent.getStringArrayListExtra("priceList");
+        sellersList = intent.getStringArrayListExtra("shopnames");
+        productName = intent.getStringArrayListExtra("results") ;
+
 
 
 
@@ -67,7 +82,11 @@ public class searchedList extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                openProductDiscription(position);
+                try {
+                    openProductDiscription(position);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
         // so item click is done now check list view
@@ -124,15 +143,19 @@ public class searchedList extends AppCompatActivity {
         }
 
     }
-    public void openProductDiscription(int index){
+    public void openProductDiscription(int index) throws InterruptedException {
 
         productSummary.add(titleList.get(index));
         productSummary.add(discriptionList.get(index));
         productSummary.add(imageList.get(index));
         productSummary.add(priceList.get(index));
+        productSummary.add(sellersList.get(index));
+        productSummary.add(productName.get(index));
+
 
         Intent intent = new Intent(this,productDiscription.class);
         intent.putExtra("productSummary",(Serializable) productSummary);
+
         startActivity(intent);
 
 

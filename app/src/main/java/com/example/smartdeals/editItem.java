@@ -266,6 +266,8 @@ public class editItem extends AppCompatActivity {
                                     dataMap.put("SellerID",currentUser);
                                     dataMap.put("Uri", duri);
                                     dataMap.put("Discount",discount);
+                                    dataMap.put("Like","0");
+                                    dataMap.put("Dislike","0");
 
 
 

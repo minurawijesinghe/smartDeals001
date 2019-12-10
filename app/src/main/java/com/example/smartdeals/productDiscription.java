@@ -47,7 +47,7 @@ public class productDiscription extends AppCompatActivity {
         productSummary = intent.getStringArrayListExtra("productSummary");
         discript.setText(productSummary.get(1));
         titl.setText(productSummary.get(0));
-        price.setText(productSummary.get(3));
+        price.setText("Rs."+productSummary.get(3  )+".00");
         seller.setText(productSummary.get(4));
         
         ;

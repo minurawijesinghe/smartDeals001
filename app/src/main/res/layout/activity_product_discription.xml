@@ -153,9 +153,8 @@
             android:layout_toRightOf="@+id/ButtonDecrement"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:textColor="@android:color/black"
+            android:textColor="#A8A7A7"
             android:textSize="25dp"
-            android:background="#C5C2C2"
             />
 
         <TextView

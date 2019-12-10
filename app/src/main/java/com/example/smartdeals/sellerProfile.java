@@ -11,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -87,7 +86,6 @@ public class sellerProfile extends AppCompatActivity {
 
 
 
-            listShow = (Button)findViewById(R.id.listShow);
             mDatabase3 = FirebaseDatabase.getInstance().getReference();
 
 
@@ -176,8 +174,9 @@ public class sellerProfile extends AppCompatActivity {
                         count++;
 
                     }
-                     if (count+1==listOfGoodsInTheShop.size()) {
-                         adapterInitializer(adapter);
+                     if (count/6 ==listOfGoodsInTheShop.size()) {
+                         listView.setAdapter(adapter);
+
                      }
 
                     progressDialog.dismiss();
@@ -196,12 +195,7 @@ public class sellerProfile extends AppCompatActivity {
 
             ///////////////////////////////////////
 
-            listShow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
+           
 
 
 
@@ -231,6 +225,8 @@ public class sellerProfile extends AppCompatActivity {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    openProductDiscription(position);
                    
                 }
             });
@@ -277,7 +273,7 @@ public class sellerProfile extends AppCompatActivity {
 
             myTitle.setText(rTitle.get(position));
             myDescription.setText(rDescription.get(position));
-            myPrice.setText("Rs."+rPrices.get(position)+".00");
+           // myPrice.setText("Rs."+rPrices.get(position)+".00");
 
 
 
@@ -309,8 +305,15 @@ public class sellerProfile extends AppCompatActivity {
 
 
     }
-    public  void adapterInitializer(ListAdapter adapter){
-        listView.setAdapter(adapter);
+
+    public void openProductDiscription(int index){
+
+
+        String productName = NamesOfGoods.get(index);
+
+        Intent intent = new Intent(this,addDiscount.class);
+        intent.putExtra("productName",productName);
+        startActivity(intent);
 
 
     }

@@ -44,6 +44,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/previousPrice"
+        android:layout_marginTop="70dp"
+        android:hint="current Discount"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/currentDiscount"
+
+
+
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/previousPrice"
         android:layout_marginTop="20dp"
         android:id="@+id/currentPrice"
         android:hint="current value"
