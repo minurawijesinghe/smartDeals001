@@ -15,9 +15,13 @@
         android:layout_height="wrap_content"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="30dp"
+        android:textSize="20dp"
+        android:textColor="#696868"
+        android:layout_centerHorizontal="true"
         android:id="@+id/output"
-        android:text="Search what you want by name or the name of the shop"  />
+        android:text="Searched results"  />
+
 
     <ListView
         android:layout_marginTop="100dp"

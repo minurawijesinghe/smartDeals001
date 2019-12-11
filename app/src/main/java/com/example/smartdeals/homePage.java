@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -51,6 +52,20 @@ public class homePage extends AppCompatActivity {
     String urls;
     String descriptions;
     String price;
+
+
+
+    //////////////////////////discount eke list tika
+    DatabaseReference databaseReference1;
+    String discount, Image,tile,discription,prices,sellerName;
+
+    List<String> discountList = new ArrayList<>();
+    List<String> discountNamelist = new ArrayList<>();
+    List<String> discountImagelist = new ArrayList<>();
+    List<String>discountPriceList =  new ArrayList<>();
+    List<String>discounttitleList =  new ArrayList<>();
+    List<String>discountSellersList =  new ArrayList<>();
+    List<String>discountDiscriptionList =  new ArrayList<>();
 
 
     ListView listView;
@@ -96,6 +111,8 @@ public class homePage extends AppCompatActivity {
     List<List<String>> likeVlues= new ArrayList<>();
 
     List<String> cockies = new ArrayList<>();
+
+    Button showDiscount;
 
 
 
@@ -173,6 +190,16 @@ public class homePage extends AppCompatActivity {
         mDatabase5 = FirebaseDatabase.getInstance().getReference();
         mDatabase6 = FirebaseDatabase.getInstance().getReference();
         mAuth2  = FirebaseAuth.getInstance();
+
+
+        showDiscount = (Button)findViewById(R.id.showDiscounts);
+
+        showDiscount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDiscountsList();
+            }
+        });
 
 
         
@@ -358,7 +385,79 @@ public class homePage extends AppCompatActivity {
             }
         });
 
-           //this cosde is for get the users current location
+
+
+        databaseReference1 = FirebaseDatabase.getInstance().getReference();
+        final ProgressDialog progressDialog7 = new ProgressDialog(this);
+        progressDialog7.setTitle("downloading content");
+        progressDialog7.show();
+
+
+
+        databaseReference1.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (int i = 0; i< lnames.size(); i++) {
+
+                    discount = dataSnapshot.child("Items").child(lnames.get(i)).child("Discount").getValue()
+                            .toString();
+
+
+
+
+                    if (Integer.parseInt(discount)!=0){
+
+
+
+                        discountList.add(discount);
+
+                        discountNamelist.add(lnames.get(i));
+
+
+                        Image = dataSnapshot.child("Items").child(lnames.get(i)).child("Uri").getValue().toString();
+                        discountImagelist.add(Image);
+                        tile = dataSnapshot.child("Items").child(lnames.get(i)).child("Title").getValue().toString();
+                        discounttitleList.add(tile);
+                        discription = dataSnapshot.child("Items").child(lnames.get(i)).child("Discription").getValue().toString();
+                        discountDiscriptionList.add(discription);
+                        prices = dataSnapshot.child("Items").child(lnames.get(i)).child("Price").getValue().toString();
+                        discountPriceList.add(price);
+                        sellerName = dataSnapshot.child("Items").child(lnames.get(i)).child("name").getValue().toString();
+                        discountSellersList.add(sellerName);
+                    }
+                    progressDialog7.dismiss();
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //this cosde is for get the users current location
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         final ProgressDialog progressDialog4 = new ProgressDialog(this);
         progressDialog4.setTitle("Downloading content ..!");
@@ -937,7 +1036,7 @@ public class homePage extends AppCompatActivity {
                  count=((Integer.parseInt(distanceV.get(k).get(1)))*7)+((Integer.parseInt(priceV.get(k).get(1)))*1)+((Integer.parseInt(likeV.get(k).get(1)))*2);
 
             }    else if (spinnerPossition==2){
-                //price efficiency
+                //Image efficiency
                  count=((Integer.parseInt(distanceV.get(k).get(1)))*2)+((Integer.parseInt(priceV.get(k).get(1)))*7)+((Integer.parseInt(likeV.get(k).get(1)))*1);
 
 
@@ -1116,6 +1215,23 @@ public class homePage extends AppCompatActivity {
             sortedDistancesStrings.add(d.toString());
         }
 
+    }
+    public void openDiscountsList(){
+
+        Intent intent = new Intent(this,discountList.class);
+        intent.putExtra("discountList",(Serializable) discountList);
+        intent.putExtra("discountImageList",(Serializable) discountImagelist);
+
+        intent.putExtra("discountTitleList",(Serializable) discounttitleList);
+        intent.putExtra("discountPriceList",(Serializable) discountPriceList);
+        intent.putExtra("discountDiscriptionList",(Serializable) discountDiscriptionList);
+        intent.putExtra("discountSellerList",(Serializable) discountSellersList);
+        intent.putExtra("discountNameList",(Serializable) discountNamelist);
+
+
+
+
+        startActivity(intent);
     }
 
 

@@ -48,12 +48,14 @@ public class productDiscription extends AppCompatActivity {
         discript.setText(productSummary.get(1));
         titl.setText(productSummary.get(0));
         price.setText("Rs."+productSummary.get(3  )+".00");
-        seller.setText(productSummary.get(4));
+        seller.setText("at "+productSummary.get(4));
         
         ;
 
 
         mdatabase8 = FirebaseDatabase.getInstance().getReference();
+
+
 
 
         Picasso.get().load(productSummary.get(2)).into(imageView);

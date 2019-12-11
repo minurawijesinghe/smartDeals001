@@ -1,5 +1,6 @@
 package com.example.smartdeals;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -22,29 +23,50 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     EditText inLpass,inLemail;
     DatabaseReference mDatabase3;
+    DatabaseReference databaseReference1;
+    DatabaseReference databaseReference2;
     String SellerList,adminID;
+    String request;
+    List<String> requestList = new ArrayList<>();
+    List<String>latList = new ArrayList<>();
+    List<String>lonList = new ArrayList<>();
+    List<String> shopNames = new ArrayList<>();
 
+    String[] sellerList;
+    List<String> sellers = new ArrayList<>();
     String userID;
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        databaseReference1 = FirebaseDatabase.getInstance().getReference();
+        databaseReference2 = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
 
 
 
             mDatabase3 = FirebaseDatabase.getInstance().getReference();
-
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Downloading content ..!");
+        progressDialog.show();
             mDatabase3.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     SellerList = dataSnapshot.child("SellersAuthKeys").getValue().toString();
                     adminID = dataSnapshot.child("admin").getValue().toString();
+                    sellerList = SellerList.split(" ,");
+
+                    progressDialog.dismiss();
 
                 }
 
@@ -54,6 +76,58 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+
+
+
+
+
+        final ProgressDialog progressDialog1 = new ProgressDialog(this);
+        progressDialog1.setTitle("Downloading content ..!");
+        progressDialog1.show();
+            //database reference for ask for the requsting list for the admin verification
+            databaseReference1.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (int j=1;j<sellerList.length;j++){
+                        String request = dataSnapshot.child(sellerList[j]).child("Location").child("verification").getValue().toString();
+                        String lat = dataSnapshot.child(sellerList[j]).child("Location").child("Latitude").getValue().toString();
+
+                        String lon = dataSnapshot.child(sellerList[j]).child("Location").child("Longitude").getValue().toString();
+                        if (IsOccupied("false",request)){
+                            requestList.add(sellerList[j]);
+                            latList.add(lat) ;
+                            lonList.add(lon);
+                        }
+
+                    }
+                    int k=0;
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+
+      /*  final ProgressDialog progressDialog2 = new ProgressDialog(this);
+        progressDialog2.setTitle("Downloading content ..!");
+        progressDialog2.show();  */
+            databaseReference2.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    for (int i=0;i<requestList.size();i++) {
+                        String shopName = dataSnapshot.child("users").child(requestList.get(i)).child("name").getValue().toString();
+                        shopNames.add(shopName);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
 
             inLemail = (EditText) findViewById(R.id.inLEmail);
             inLpass = (EditText) findViewById(R.id.inLpass);
@@ -122,13 +196,20 @@ public class MainActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             String usrId = mAuth.getCurrentUser().getUid();
 
-                            if (adminID == usrId){
+                            if (requestList.contains(usrId)) {
+
+                                openRqstPending();
+                            } else
+
+                            if (IsOccupied(usrId,adminID)){
 
                                           openAdmin();
                                           return;
-                            }
+                            }    else
+                                Continue( IsOccupied(usrId,SellerList));
+                            
 
-                            Continue( IsOccupied(usrId,SellerList));
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(MainActivity.this, "Authentication failed."+task.getException().getMessage()+"Try again",
@@ -174,8 +255,20 @@ public class MainActivity extends AppCompatActivity {
     void openAdmin(){
 
         Intent intent = new Intent(this,adminVerrification.class);
+        intent.putExtra("requestList",(Serializable)requestList);
+        intent.putExtra("latList",(Serializable) latList);
+        intent.putExtra("lonList",(Serializable) lonList);
+        intent.putExtra("shopNames",(Serializable)shopNames);
+
         startActivity(intent);
 
+
+    }
+
+    public void openRqstPending(){
+
+            Intent intent =  new Intent(this,requestPending.class);
+            startActivity(intent);
 
     }
 

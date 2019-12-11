@@ -216,6 +216,7 @@ public class register extends AppCompatActivity {
                         Map datamap = new HashMap();
                         datamap.put("Latitude",tvLati);
                         datamap.put("Longitude",tvLongi);
+                        datamap.put("verification",false);
 
                         mDatabase2.child(user_id).child("Location").setValue(datamap);
 

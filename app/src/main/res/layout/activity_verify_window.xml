@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".verifyWindow">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/shopName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:textSize="18dp"
+        android:textColor="#585757"
+        android:text="shopName"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/shopId"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:textSize="14dp"
+        android:textColor="#585757"
+        android:text="ShopId"
+        android:layout_below="@id/shopName"
+
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:textSize="14dp"
+        android:textColor="#585757"
+        android:id="@+id/latdis"
+        android:text="latitude"
+        android:layout_below="@id/shopId"
+        android:layout_marginLeft="30dp"
+
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:id="@+id/latitude"
+        android:textSize="14dp"
+        android:textColor="#585757"
+        android:text="latitude"
+        android:layout_below="@id/shopId"
+        android:layout_toRightOf="@+id/latdis"
+        android:layout_marginLeft="50dp"
+
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:textSize="14dp"
+        android:textColor="#585757"
+        android:id="@+id/londis"
+        android:text="latitude"
+        android:layout_below="@id/latdis"
+        android:layout_marginLeft="30dp"
+
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:id="@+id/longitude"
+        android:textSize="14dp"
+        android:textColor="#585757"
+        android:text="latitude"
+        android:layout_below="@id/latdis"
+        android:layout_toRightOf="@+id/latdis"
+        android:layout_marginLeft="50dp"
+
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Verify"
+        android:id="@+id/verify"
+        android:layout_below="@+id/londis"
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="30dp"
+
+        />
+
+    />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="locate"
+        android:id="@+id/locate"
+        android:layout_below="@+id/londis"
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="250dp"
+        />
+
+
+
+
+
+
+
+</RelativeLayout>

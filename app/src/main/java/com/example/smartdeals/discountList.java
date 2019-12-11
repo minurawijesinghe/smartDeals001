@@ -22,57 +22,46 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class searchedList extends AppCompatActivity {
+public class discountList extends AppCompatActivity {
 
 
-    ListView listView;
-    List<String> titleList = new ArrayList<>();
-    List<String> discriptionList = new ArrayList<>();
-    List<String> imageList = new ArrayList<>();
-    List<String> priceList = new ArrayList<>();
-    List<String>sellersList = new ArrayList<>();
-    List<String>productName = new ArrayList<>();
-
-
+    List<String> discountNameList = new ArrayList<>();
+    List<String> discountList = new ArrayList<>();
+    List<String> discountImagelist = new ArrayList<>();
+    List<String>discountPriceList =  new ArrayList<>();
+    List<String>discounttitleList =  new ArrayList<>();
+    List<String>discountSellersList =  new ArrayList<>();
+    List<String>discountDiscriptionList =  new ArrayList<>();
     List<String> productSummary = new ArrayList<>();
 
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        productSummary.clear();
-    }
-    @Override
-    public void onBackPressed() {
+
+    ListView listView;
 
 
-        Intent intent = new Intent(this, homePage.class);      //I suppose they are in same package
 
-        //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
 
-    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_searched_list);
+        setContentView(R.layout.activity_discount_list);
+
+
 
         Intent intent = getIntent();
-        titleList = intent.getStringArrayListExtra("titleList");
-        imageList = intent.getStringArrayListExtra("imageList");
-
-        discriptionList = intent.getStringArrayListExtra("discriptionList");
-        priceList = intent.getStringArrayListExtra("priceList");
-        sellersList = intent.getStringArrayListExtra("shopnames");
-        productName = intent.getStringArrayListExtra("results") ;
-
-
-
+        discountList =  intent.getStringArrayListExtra("discountList");
+        discountImagelist=intent.getStringArrayListExtra("discountImageList");
+        discounttitleList = intent.getStringArrayListExtra("discountTitleList");
+        discountPriceList = intent.getStringArrayListExtra("discountPriceList") ;
+        discountDiscriptionList = intent.getStringArrayListExtra("discountDiscriptionList") ;
+        discountSellersList = intent.getStringArrayListExtra("discountSellerList") ;
+        discountNameList = intent.getStringArrayListExtra("discountNameList");
 
 
         listView = findViewById(R.id.listView);
-        searchedList.MyAdapter adapter = new searchedList.MyAdapter(this, titleList, discriptionList, imageList,priceList);
+        discountList.MyAdapter adapter = new discountList.MyAdapter(this, discounttitleList, discountDiscriptionList, discountImagelist,discountPriceList,discountList);
         listView.setAdapter(adapter);
 
 
@@ -82,15 +71,15 @@ public class searchedList extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                try {
+
                     openProductDiscription(position);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+
             }
         });
-        // so item click is done now check list view
+
     }
+
+
 
 
 
@@ -101,13 +90,15 @@ public class searchedList extends AppCompatActivity {
         List<String> rDescription;
         List<String> rImgs;
         List<String> rPrices;
-        MyAdapter (Context c,List<String> ltitle, List<String> ldescription,List<String> limages,List<String> lprices) {
-            super(c, R.layout.row_homepage, R.id.textView1, ltitle);
+        List<String> rDiscount;
+        MyAdapter (Context c,List<String> ltitle, List<String> ldescription,List<String> limages,List<String> lprices,List<String>lDiscount) {
+            super(c, R.layout.row_discount_list, R.id.textView1, ltitle);
             this.context = c;
             this.rTitle = ltitle;
             this.rDescription = ldescription;
             this.rImgs = limages;
             this.rPrices = lprices;
+            this.rDiscount=lDiscount;
 
 
 
@@ -117,12 +108,13 @@ public class searchedList extends AppCompatActivity {
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             LayoutInflater layoutInflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View row = layoutInflater.inflate(R.layout.row_homepage, parent, false);
+            View row = layoutInflater.inflate(R.layout.row_discount_list, parent, false);
 
             ImageView images =row.findViewById(R.id.image);
             TextView myTitle = row.findViewById(R.id.textView1);
             TextView myDescription = row.findViewById(R.id.textView2);
             TextView myPrices = row.findViewById(R.id.textView3);
+            TextView myDiscount = row.findViewById(R.id.textView4);
 
 
 
@@ -131,6 +123,7 @@ public class searchedList extends AppCompatActivity {
             myTitle.setText(rTitle.get(position));
             myDescription.setText(rDescription.get(position));
             myPrices.setText("Rs."+rPrices.get(position)+".00");
+            myDiscount.setText(rDiscount.get(position)+" % OFF");
 
 
 
@@ -139,14 +132,14 @@ public class searchedList extends AppCompatActivity {
         }
 
     }
-    public void openProductDiscription(int index) throws InterruptedException {
+    public void openProductDiscription(int index){
 
-        productSummary.add(titleList.get(index));
-        productSummary.add(discriptionList.get(index));
-        productSummary.add(imageList.get(index));
-        productSummary.add(priceList.get(index));
-        productSummary.add(sellersList.get(index));
-        productSummary.add(productName.get(index));
+        productSummary.add(discounttitleList.get(index));
+        productSummary.add(discountDiscriptionList.get(index));
+        productSummary.add(discountImagelist.get(index));
+        productSummary.add(discountPriceList.get(index));
+        productSummary.add(discountSellersList.get(index));
+        productSummary.add(discountNameList.get(index));
 
 
         Intent intent = new Intent(this,productDiscription.class);
@@ -156,5 +149,4 @@ public class searchedList extends AppCompatActivity {
 
 
     }
-    
 }

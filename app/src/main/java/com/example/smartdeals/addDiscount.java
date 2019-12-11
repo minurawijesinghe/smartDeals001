@@ -76,6 +76,7 @@ public class addDiscount extends AppCompatActivity {
                 }   else {
 
                   mDatabase.child("Items").child(productName).child("Discount").setValue(percentage);
+                  mDatabase.child("discount").child(productName).setValue(percentage);
                     Toast.makeText(addDiscount.this, "Discount is updated",Toast.LENGTH_SHORT).show();
 
                 }
